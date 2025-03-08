@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Free Youtube transcript</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        color: white;
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background-color: #491b4c;
+      }
+      h1 {
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 30px;
+      }
+      #myInput {
+        width: 100%;
+        height: 100%;
+      }
+      i {
+        font-size: 25px;
+        margin-right: 4px;
+      }
+      button {
+        font-size: 25px;
+      }
+
+      .container {
+        width: 100%;
+        height: 70%;
+        padding: 30px;
+        gap: 40px;
+        display: flex;
+        background-color: #1c172e;
+        /* border: 2px solid rgba(255, 0, 0, 0.452); */
+      }
+      .left {
+        width: 50%;
+      }
+      .left iframe {
+        width: 100%;
+        height: 60%;
+        margin-bottom: 50px;
+      }
+      .options {
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        color: white;
+        background-color: #241f3a;
+        padding: 20px 20px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 25px -1px #fc498294;
+        margin-bottom: 8%;
+      }
+      h3 {
+        font-size: 20px;
+        color: white;
+      }
+      #copyBtn,
+      #downloadBtn {
+        padding: 10px 20px;
+        border-radius: 30px;
+        border: 2px solid #4f46e5;
+      }
+      #copyBtn {
+        background-color: #28234b;
+        color: white;
+      }
+      #copyBtn:hover {
+        background-color: #2f2955;
+      }
+      #downloadBtn {
+        background-color: #3a2ee4;
+        color: white;
+      }
+      #downloadBtn:hover {
+        background-color: #473ec3;
+      }
+      h2 {
+        font-size: 16px;
+        text-align: center;
+      }
+      .right {
+        display: flex;
+        width: 50%;
+      }
+      .right textarea {
+        border-radius: 20px;
+        padding: 10px;
+        border: 0;
+        scrollbar-width: thin;
+      }
+      #generatorBtn {
+        padding: 10px 20px;
+        border-radius: 20px;
+        margin: 40px 0;
+        background-color: #1c172e;
+        position: relative;
+        left: 60%;
+      }
+      a {
+        text-decoration: none;
+      }
+      #generatorBtn:hover {
+        background-color: #3a2ee4;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Generated Transcript Result</h1>
+    <div class="container">
+      <div class="left">
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/<%= videoID %>"
+          id="ytplayer"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        >
+        </iframe>
+        <div class="options">
+          <h3>Get the transcript:</h3>
+          <button id="copyBtn" onclick="myFunction()">
+            <i class="bx bx-copy"></i>Copy
+          </button>
+          <button id="downloadBtn" onclick="downloadFile()">
+            <i class="bx bx-download"></i>Download
+          </button>
+        </div>
+        <h2>
+          Upload the transcript to AwaisTools to get a summary of this video
+        </h2>
+      </div>
+      <div class="right">
+        <textarea
+          id="myInput"
+          style="background-color: #241f3a; color: #ffffff"
+        ></textarea>
+      </div>
+    </div>
+    <button id="generatorBtn">
+      <a href="http://localhost:3000/youtube-transcript"
+        >YouTube Transcript Generator</a
+      >
+    </button>
+
+    <script>
+      // Embed EJS data safely into JavaScript
+      let transcript = <%- JSON.stringify(transcript) %>;
+
+      // Extract transcript text with line breaks
+      let txt = transcript.map(el => el.text).join("\n");
+
+      document.querySelector("#myInput").value = txt;
+      function myFunction() {
+        // Get the text field
+        let copyText = document.getElementById("myInput");
+        // Select the text field
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText.value);
+
+        // Alert the copied text
+        alert("Copied the text: " + copyText.value);
+      }
+
+      const downloadFile = () => {
+         const link = document.createElement("a");
+         const content = document.querySelector("textarea").value;
+         const file = new Blob([content], { type: 'text/plain' });
+         link.href = URL.createObjectURL(file);
+         link.download = "sample.txt";
+         link.click();
+         URL.revokeObjectURL(link.href);
+      };
+    </script>
+  </body>
+</html>
